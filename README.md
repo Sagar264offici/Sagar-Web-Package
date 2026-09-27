@@ -2,7 +2,7 @@
 
 Interactive 3D brochure website for **Sagar Pathak — Web Development Packages**.
 
-Stack: **React + TypeScript + Vite + Three.js (@react-three/fiber/drei) + Framer Motion + Tailwind CSS**.
+Stack: **React + TypeScript + Vite + Canvas atom animation + Framer Motion + Tailwind CSS**.
 
 ## Content (1:1 with PDF)
 

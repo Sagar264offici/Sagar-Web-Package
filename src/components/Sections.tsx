@@ -451,7 +451,7 @@ export function Contact() {
         </div>
       </div>
       <footer className="text-center text-xs text-slate-500 mt-10">
-        © {new Date().getFullYear()} Sagar Pathak · <a className="hover:text-gold transition" href="https://sagar-horizon.vercel.app" target="_blank" rel="noreferrer">Portfolio</a> · Built with React + TS + Three.js + Framer Motion + Tailwind
+        © {new Date().getFullYear()} Sagar Pathak · <a className="hover:text-gold transition" href="https://sagar-horizon.vercel.app" target="_blank" rel="noreferrer">Portfolio</a> · Built with React + TS + Canvas + Framer Motion + Tailwind
       </footer>
     </section>
   )

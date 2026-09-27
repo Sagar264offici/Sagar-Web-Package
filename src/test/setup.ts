@@ -8,8 +8,8 @@ class RO {
 // @ts-ignore polyfill for jsdom
 global.ResizeObserver = global.ResizeObserver || RO
 
-// jsdom has no WebGL — stub canvas getContext
-HTMLCanvasElement.prototype.getContext = (() => () => null) as any
+// jsdom has no canvas 2D — return null so components take their no-ctx path
+HTMLCanvasElement.prototype.getContext = (() => null) as any
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

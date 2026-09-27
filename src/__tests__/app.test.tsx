@@ -1,13 +1,14 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-
-vi.mock('../components/Hero3D', () => ({
-  default: () => <div data-testid="hero-3d" />,
-}))
 
 import App from '../App'
 
 describe('brochure app renders every PDF word-group', () => {
+  it('renders the spinning atom canvas hero', () => {
+    render(<App />)
+    expect(screen.getByTestId('atom-canvas')).toBeInTheDocument()
+  })
+
   it('renders hero headline and price range', () => {
     render(<App />)
     expect(screen.getAllByText(/WEB DEVELOPMENT/i).length).toBeGreaterThan(0)

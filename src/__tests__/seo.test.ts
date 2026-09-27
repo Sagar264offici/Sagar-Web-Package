@@ -50,14 +50,18 @@ describe('SEO layer', () => {
 })
 
 describe('performance optimizations', () => {
-  it('lazy-loads the Three.js hero canvas', () => {
-    expect(read('src/components/Hero.tsx')).toMatch(/lazy\(\(\) => import\('\.\/Hero3D'\)\)/)
+  it('hero uses a lightweight dependency-free 2D atom canvas (no three.js)', () => {
+    expect(read('src/components/Hero.tsx')).toMatch(/AtomCanvas/)
+    expect(read('src/components/Hero.tsx')).not.toMatch(/Hero3D/)
+    expect(existsSync(resolve(root, 'src/components/AtomCanvas.tsx'))).toBe(true)
+    expect(existsSync(resolve(root, 'src/components/Hero3D.tsx'))).toBe(false)
+    const pkg = JSON.parse(read('package.json')) as { dependencies: Record<string, string> }
+    expect('three' in pkg.dependencies).toBe(false)
   })
 
-  it('splits vendor chunks (react / three / motion)', () => {
+  it('splits vendor chunks (react / motion)', () => {
     const cfg = read('vite.config.ts')
     expect(cfg).toMatch(/manualChunks/)
-    expect(cfg).toMatch(/three/)
     expect(cfg).toMatch(/motion/)
   })
 

@@ -1,16 +1,11 @@
-import { Suspense, lazy } from 'react'
 import { motion } from 'framer-motion'
-
-// Code-split the heavy Three.js canvas so first paint stays fast (SEO / LCP).
-const Hero3D = lazy(() => import('./Hero3D'))
+import AtomCanvas from './AtomCanvas'
 
 export default function Hero() {
   return (
     <header id="top" className="relative min-h-screen flex items-center overflow-hidden">
       <div className="absolute inset-0 grid-bg" />
-      <Suspense fallback={null}>
-        <Hero3D />
-      </Suspense>
+      <AtomCanvas />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-28 pb-16 grid lg:grid-cols-2 gap-12 items-center w-full">
