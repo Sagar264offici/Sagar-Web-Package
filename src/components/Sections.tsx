@@ -1,6 +1,30 @@
 import { motion } from 'framer-motion'
 import { PACKAGES, FOUNDATION, INFRA, COMPARISON_ROWS, TERMS, SOCIALS } from '../data'
 import { Reveal, SectionHeading } from './ui'
+import { GithubIcon, LinkedinIcon, InstagramIcon, PortfolioIcon } from './icons'
+
+const SOCIAL_STYLE: Record<string, { tile: string; icon: (cls: string) => JSX.Element; glow: string }> = {
+  PORTFOLIO: {
+    tile: 'bg-gradient-to-br from-gold to-amber-600 text-black',
+    icon: (c) => <PortfolioIcon className={c} />,
+    glow: 'group-hover:shadow-[0_0_28px_rgba(245,185,66,0.45)]',
+  },
+  GITHUB: {
+    tile: 'bg-[#161b22] text-white border border-white/20',
+    icon: (c) => <GithubIcon className={c} />,
+    glow: 'group-hover:shadow-[0_0_28px_rgba(255,255,255,0.25)]',
+  },
+  LINKEDIN: {
+    tile: 'bg-[#0A66C2] text-white',
+    icon: (c) => <LinkedinIcon className={c} />,
+    glow: 'group-hover:shadow-[0_0_28px_rgba(10,102,194,0.6)]',
+  },
+  INSTAGRAM: {
+    tile: 'bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white',
+    icon: (c) => <InstagramIcon className={c} />,
+    glow: 'group-hover:shadow-[0_0_28px_rgba(238,42,123,0.55)]',
+  },
+}
 
 function PriceCard({ pkg, index }: { pkg: (typeof PACKAGES)[number]; index: number }) {
   return (
@@ -367,27 +391,50 @@ export function Contact() {
               <Reveal delay={0.1}>
                 <p className="text-xs tracking-[0.3em] text-slate-400">SOCIALS / PROFESSIONAL</p>
                 <div className="mt-4 space-y-3">
-                  {/* portfolio first — hero link */}
-                  <a href="https://sagar-horizon.vercel.app" target="_blank" rel="noreferrer" className="flex items-center gap-4 rounded-2xl px-5 py-4 bg-gradient-to-r from-gold/15 to-electric/10 border border-gold/40 hover:border-gold transition group">
-                    <span className="w-10 h-10 rounded-xl bg-gold text-black font-display font-bold flex items-center justify-center shrink-0">✦</span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[11px] tracking-[0.25em] text-gold">PORTFOLIO</p>
-                      <p className="font-medium truncate group-hover:text-gold transition">sagar-horizon.vercel.app</p>
-                    </div>
-                    <span className="text-gold">↗</span>
-                  </a>
-                  {SOCIALS.map((s) => (
-                    <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="flex items-center gap-4 glass rounded-2xl px-5 py-4 hover:border-gold/50 transition group">
-                      <span className="w-10 h-10 rounded-xl bg-white/8 border border-white/12 font-display font-bold text-gold flex items-center justify-center shrink-0">
-                        {s.label.charAt(0)}
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[11px] tracking-[0.25em] text-slate-400">{s.label}</p>
-                        <p className="font-medium truncate group-hover:text-gold transition">{s.value}</p>
-                      </div>
-                      <span className="text-gold">↗</span>
-                    </a>
-                  ))}
+                  {[
+                    { label: 'PORTFOLIO', value: 'sagar-horizon.vercel.app', href: 'https://sagar-horizon.vercel.app', hero: true },
+                    ...SOCIALS.map((s) => ({ ...s, hero: false })),
+                  ].map((s, i) => {
+                    const style = SOCIAL_STYLE[s.label]
+                    return (
+                      <motion.a
+                        key={s.label}
+                        href={s.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        data-testid={`social-${s.label.toLowerCase()}`}
+                        initial={{ opacity: 0, x: 48, scale: 0.9 }}
+                        whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                        viewport={{ once: true, margin: '-40px' }}
+                        transition={{ type: 'spring', stiffness: 260, damping: 19, delay: i * 0.09 }}
+                        whileHover={{ scale: 1.045, x: 6 }}
+                        whileTap={{ scale: 0.96 }}
+                        className={`flex items-center gap-4 rounded-2xl px-5 py-4 border transition-colors group ${
+                          s.hero
+                            ? 'bg-gradient-to-r from-gold/15 to-electric/10 border-gold/40 hover:border-gold'
+                            : 'glass hover:border-gold/50'
+                        }`}
+                      >
+                        <motion.span
+                          whileHover={{ rotate: -10, scale: 1.15 }}
+                          transition={{ type: 'spring', stiffness: 400, damping: 12 }}
+                          className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 transition-shadow ${style?.tile ?? ''} ${style?.glow ?? ''}`}
+                        >
+                          {style?.icon('w-5 h-5')}
+                        </motion.span>
+                        <div className="min-w-0 flex-1">
+                          <p className={`text-[11px] tracking-[0.25em] ${s.hero ? 'text-gold' : 'text-slate-400'}`}>{s.label}</p>
+                          <p className="font-medium truncate group-hover:text-gold transition">{s.value}</p>
+                        </div>
+                        <motion.span
+                          className="text-gold"
+                          whileHover={{ x: 3, y: -3, scale: 1.3 }}
+                        >
+                          ↗
+                        </motion.span>
+                      </motion.a>
+                    )
+                  })}
                 </div>
               </Reveal>
               <Reveal delay={0.18}>

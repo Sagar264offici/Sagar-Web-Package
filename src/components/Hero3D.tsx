@@ -3,68 +3,128 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, Stars, ContactShadows } from '@react-three/drei'
 import * as THREE from 'three'
 
-function CrystalCore() {
-  const mesh = useRef<THREE.Mesh>(null)
-  const wire = useRef<THREE.Mesh>(null)
-  useFrame((state) => {
-    const t = state.clock.elapsedTime
-    if (mesh.current) {
-      mesh.current.rotation.y = t * 0.25
-      mesh.current.rotation.x = Math.sin(t * 0.3) * 0.3
-    }
-    if (wire.current) {
-      wire.current.rotation.y = -t * 0.15
-      wire.current.rotation.z = t * 0.1
+export const REACT_CYAN = '#61DAFB'
+const ORBIT_RADIUS = 2.2
+
+type OrbitProps = {
+  /** rotation of this ellipse within the logo plane (0°, 60°, 120° — like the real React mark) */
+  tilt: number
+  speed: number
+  offset: number
+}
+
+function ElectronOrbit({ tilt, speed, offset }: OrbitProps) {
+  const electron = useRef<THREE.Mesh>(null)
+  const angle = useRef(offset)
+
+  useFrame((_, delta) => {
+    angle.current += delta * speed
+    if (electron.current) {
+      electron.current.position.set(
+        Math.cos(angle.current) * ORBIT_RADIUS,
+        Math.sin(angle.current) * ORBIT_RADIUS,
+        0,
+      )
     }
   })
+
   return (
-    <group>
-      <Float speed={2} rotationIntensity={0.6} floatIntensity={1.2}>
-        <mesh ref={mesh}>
-          <icosahedronGeometry args={[1.15, 1]} />
-          <meshPhysicalMaterial
-            color="#0b1020"
-            metalness={0.9}
-            roughness={0.15}
-            clearcoat={1}
-            emissive="#123"
-            emissiveIntensity={0.4}
+    <group rotation={[0, 0, tilt]}>
+      {/* orbit path — one ellipse of the React mark */}
+      <mesh>
+        <torusGeometry args={[ORBIT_RADIUS, 0.028, 16, 160]} />
+        <meshBasicMaterial color={REACT_CYAN} transparent opacity={0.95} />
+      </mesh>
+      {/* electron riding the orbit, with an additive glow halo */}
+      <mesh ref={electron}>
+        <sphereGeometry args={[0.11, 24, 24]} />
+        <meshBasicMaterial color="#ffffff" />
+        <mesh scale={2.4}>
+          <sphereGeometry args={[0.11, 16, 16]} />
+          <meshBasicMaterial
+            color={REACT_CYAN}
+            transparent
+            opacity={0.35}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
           />
         </mesh>
-        <mesh ref={wire} scale={1.28}>
-          <icosahedronGeometry args={[1.15, 1]} />
-          <meshBasicMaterial color="#38e1ff" wireframe transparent opacity={0.35} />
-        </mesh>
-        {/* orbiting rings */}
-        <mesh rotation={[Math.PI / 2.4, 0, 0]}>
-          <torusGeometry args={[2.1, 0.02, 16, 120]} />
-          <meshBasicMaterial color="#f5b942" transparent opacity={0.9} />
-        </mesh>
-        <mesh rotation={[Math.PI / 3, 0.4, 0]}>
-          <torusGeometry args={[2.5, 0.012, 16, 120]} />
-          <meshBasicMaterial color="#7c5cff" transparent opacity={0.7} />
-        </mesh>
-      </Float>
+      </mesh>
     </group>
   )
 }
 
-function ParticleRing({ count = 260 }: { count?: number }) {
+/** Nucleus (proton core) of the atom. */
+function Nucleus() {
+  const core = useRef<THREE.Mesh>(null)
+  useFrame((state) => {
+    if (core.current) {
+      const s = 1 + Math.sin(state.clock.elapsedTime * 2.2) * 0.06
+      core.current.scale.setScalar(s)
+    }
+  })
+  return (
+    <group>
+      <mesh ref={core}>
+        <sphereGeometry args={[0.34, 32, 32]} />
+        <meshStandardMaterial color="#062a33" emissive={REACT_CYAN} emissiveIntensity={2.4} roughness={0.3} />
+      </mesh>
+      {/* soft aura around the core */}
+      <mesh scale={2.6}>
+        <sphereGeometry args={[0.34, 24, 24]} />
+        <meshBasicMaterial
+          color={REACT_CYAN}
+          transparent
+          opacity={0.16}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+    </group>
+  )
+}
+
+/** Full React logo: nucleus + 3 elliptical orbits + 3 electrons, slowly spinning. */
+function ReactAtom() {
+  const spin = useRef<THREE.Group>(null)
+
+  useFrame((state, delta) => {
+    if (spin.current) {
+      spin.current.rotation.y += delta * 0.35
+      spin.current.rotation.x = 0.5 + Math.sin(state.clock.elapsedTime * 0.4) * 0.08
+    }
+  })
+
+  return (
+    <Float speed={1.6} rotationIntensity={0.25} floatIntensity={0.9}>
+      <group ref={spin} rotation={[0.5, 0, -0.12]}>
+        <ElectronOrbit tilt={0} speed={1.25} offset={0} />
+        <ElectronOrbit tilt={Math.PI / 3} speed={1.05} offset={2.1} />
+        <ElectronOrbit tilt={(2 * Math.PI) / 3} speed={1.45} offset={4.2} />
+        <Nucleus />
+      </group>
+    </Float>
+  )
+}
+
+function ParticleRing({ count = 180 }: { count?: number }) {
   const ref = useRef<THREE.Points>(null)
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2
-      const r = 2.8 + Math.random() * 1.6
+      const r = 3.1 + Math.random() * 1.6
       arr[i * 3] = Math.cos(angle) * r
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 2.4
+      arr[i * 3 + 1] = (Math.random() - 0.5) * 2.6
       arr[i * 3 + 2] = Math.sin(angle) * r
     }
     return arr
   }, [count])
+
   useFrame((state) => {
     if (ref.current) ref.current.rotation.y = state.clock.elapsedTime * 0.08
   })
+
   return (
     <points ref={ref}>
       <bufferGeometry>
@@ -79,19 +139,18 @@ export default function Hero3D() {
   return (
     <div className="absolute inset-0" data-testid="hero-3d" aria-hidden="true">
       <Canvas
-        camera={{ position: [0, 0.6, 7], fov: 45 }}
+        camera={{ position: [0, 0.6, 7.5], fov: 45 }}
         dpr={[1, 1.5]}
-        frameloop="always"
         gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
       >
         <ambientLight intensity={0.7} />
-        <pointLight position={[5, 5, 5]} intensity={1.4} color="#38e1ff" />
-        <pointLight position={[-5, -2, 3]} intensity={1.2} color="#f5b942" />
+        <pointLight position={[5, 5, 5]} intensity={1.6} color={REACT_CYAN} />
+        <pointLight position={[-5, -2, 3]} intensity={1.1} color="#f5b942" />
         <pointLight position={[0, 3, -4]} intensity={0.8} color="#7c5cff" />
         <Stars radius={60} depth={30} count={1500} factor={3} saturation={0} fade speed={0.5} />
-        <CrystalCore />
-        <ParticleRing count={180} />
-        <ContactShadows position={[0, -2.4, 0]} opacity={0.55} scale={12} blur={2.4} far={4} color="#000" />
+        <ReactAtom />
+        <ParticleRing />
+        <ContactShadows position={[0, -2.8, 0]} opacity={0.5} scale={12} blur={2.4} far={4} color="#000" />
       </Canvas>
     </div>
   )

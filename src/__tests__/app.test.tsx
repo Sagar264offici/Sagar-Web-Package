@@ -37,6 +37,15 @@ describe('brochure app renders every PDF word-group', () => {
     expect(links[0].getAttribute('href')).toContain('.pdf')
   })
 
+  it('renders brand-logo social cards (portfolio, github, linkedin, instagram)', () => {
+    render(<App />)
+    for (const name of ['portfolio', 'github', 'linkedin', 'instagram']) {
+      const link = screen.getByTestId(`social-${name}`)
+      expect(link).toBeInTheDocument()
+      expect(link.querySelector('svg')).not.toBeNull()
+    }
+  })
+
   it('renders socials, portfolio link and thank-you footer', () => {
     render(<App />)
     expect(screen.getByText(/github.com\/Sagar264Offici/i)).toBeInTheDocument()
