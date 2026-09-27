@@ -37,9 +37,10 @@ describe('brochure app renders every PDF word-group', () => {
     expect(links[0].getAttribute('href')).toContain('.pdf')
   })
 
-  it('renders socials and thank-you footer', () => {
+  it('renders socials, portfolio link and thank-you footer', () => {
     render(<App />)
     expect(screen.getByText(/github.com\/Sagar264Offici/i)).toBeInTheDocument()
+    expect(screen.getByTestId('portfolio-link').getAttribute('href')).toContain('sagar-horizon.vercel.app')
     expect(screen.getByText(/THANK YOU/i)).toBeInTheDocument()
   })
 })

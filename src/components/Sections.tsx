@@ -285,59 +285,126 @@ export function Terms() {
 }
 
 export function Contact() {
+  const steps = ['Select a package', 'Confirm scope', 'Build', 'Review', 'Launch']
   return (
     <section id="contact" className="max-w-7xl mx-auto px-6 py-20">
-      <div className="glass rounded-[2rem] p-10 md:p-14 relative overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-gold/15 blur-3xl rounded-full" />
-        <div className="grid lg:grid-cols-2 gap-10 relative">
-          <div>
-            <Reveal>
-              <p className="text-xs tracking-[0.3em] text-gold">SAGAR PATHAK • 08 — READY TO BUILD</p>
-              <h2 className="font-display text-4xl md:text-6xl font-bold mt-4 leading-tight">
-                Let's make<br /><span className="gold-gradient-text">something real.</span>
-              </h2>
-              <p className="text-slate-300 mt-4">Select a package, confirm scope, build, review, launch.</p>
-              <p className="mt-6 text-sm tracking-[0.25em] text-slate-400">STARTING AT</p>
-              <p className="font-display text-4xl font-bold">₹10,000 <span className="text-lg text-slate-400">WEBSITE</span></p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div className="flex flex-wrap gap-3 mt-8">
-                <a href="/Sagar_Pathak_Web_Development_Packages_INTERACTIVE.pdf" download className="bg-gold text-black font-semibold px-7 py-3 rounded-full hover:bg-white transition" data-testid="download-pdf">
-                  Download brochure (PDF)
-                </a>
-                <a href="#top" className="border border-white/20 px-7 py-3 rounded-full hover:border-gold transition">Back to top ↑</a>
-              </div>
-            </Reveal>
-          </div>
-          <div>
-            <Reveal delay={0.1}>
-              <p className="text-xs tracking-[0.3em] text-slate-400">SOCIALS / PROFESSIONAL</p>
-              <div className="mt-4 space-y-3">
-                {SOCIALS.map((s) => (
-                  <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="flex items-center justify-between glass rounded-2xl px-5 py-4 hover:border-gold/50 transition group">
-                    <div>
-                      <p className="text-[11px] tracking-[0.25em] text-slate-400">{s.label}</p>
-                      <p className="font-medium group-hover:text-gold transition">{s.value}</p>
+      <div className="relative rounded-[2rem] p-[1px] bg-gradient-to-br from-gold/60 via-white/10 to-electric/50 overflow-hidden">
+        <div className="glass rounded-[calc(2rem-1px)] p-8 md:p-14 relative overflow-hidden">
+          <div className="absolute -top-28 -right-28 w-[28rem] h-[28rem] bg-gold/15 blur-3xl rounded-full pointer-events-none" />
+          <div className="absolute -bottom-32 -left-24 w-[24rem] h-[24rem] bg-electric/10 blur-3xl rounded-full pointer-events-none" />
+
+          <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12 relative">
+            <div>
+              <Reveal>
+                <p className="text-xs tracking-[0.3em] text-gold">SAGAR PATHAK • 08 — READY TO BUILD</p>
+                <h2 className="font-display text-4xl md:text-6xl font-bold mt-4 leading-[1.02]">
+                  Let's make<br /><span className="gold-gradient-text">something real.</span>
+                </h2>
+              </Reveal>
+
+              {/* identity card */}
+              <Reveal delay={0.08}>
+                <div className="mt-8 flex items-center gap-5 rounded-3xl border border-white/10 bg-white/[0.04] p-5">
+                  <div className="relative shrink-0">
+                    <div className="absolute -inset-1.5 rounded-full bg-gradient-to-tr from-gold via-electric to-violet2 blur-[6px] opacity-70" />
+                    <img
+                      src="/portrait.png"
+                      alt="Portrait of Sagar Pathak, web developer"
+                      width={88}
+                      height={88}
+                      loading="lazy"
+                      decoding="async"
+                      className="relative w-20 h-20 md:w-22 md:h-22 rounded-full object-cover border-2 border-white/20"
+                    />
+                    <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-ink" title="Available for projects" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-display font-bold text-xl leading-tight">Sagar Pathak</p>
+                    <p className="text-sm text-slate-300 mt-0.5">Web Development • Websites • Custom Apps</p>
+                    <p className="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-emerald-300 bg-emerald-400/10 border border-emerald-300/20 rounded-full px-3 py-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Open for projects
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+
+              {/* process */}
+              <Reveal delay={0.12}>
+                <ol className="mt-6 flex flex-wrap items-center gap-2 text-xs" aria-label="How it works">
+                  {steps.map((s, i) => (
+                    <li key={s} className="flex items-center gap-2">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-3 py-1.5 text-slate-200">
+                        <span className="font-display font-bold text-gold">{String(i + 1).padStart(2, '0')}</span> {s}
+                      </span>
+                      {i < steps.length - 1 && <span className="text-slate-600">→</span>}
+                    </li>
+                  ))}
+                </ol>
+              </Reveal>
+
+              <Reveal delay={0.16}>
+                <p className="mt-6 text-sm tracking-[0.25em] text-slate-400">STARTING AT</p>
+                <p className="font-display text-4xl font-bold">₹10,000 <span className="text-lg text-slate-400">WEBSITE</span></p>
+                <div className="flex flex-wrap gap-3 mt-6">
+                  <a
+                    href="https://sagar-horizon.vercel.app"
+                    target="_blank"
+                    rel="noreferrer"
+                    data-testid="portfolio-link"
+                    className="bg-gold text-black font-semibold px-7 py-3 rounded-full hover:bg-white transition"
+                  >
+                    View my portfolio ↗
+                  </a>
+                  <a href="/Sagar_Pathak_Web_Development_Packages_INTERACTIVE.pdf" download className="border border-white/20 px-7 py-3 rounded-full hover:border-gold hover:text-gold transition" data-testid="download-pdf">
+                    Brochure (PDF) ↓
+                  </a>
+                  <a href="#top" className="px-5 py-3 rounded-full text-slate-400 hover:text-white transition text-sm self-center">Back to top ↑</a>
+                </div>
+              </Reveal>
+            </div>
+
+            <div>
+              <Reveal delay={0.1}>
+                <p className="text-xs tracking-[0.3em] text-slate-400">SOCIALS / PROFESSIONAL</p>
+                <div className="mt-4 space-y-3">
+                  {/* portfolio first — hero link */}
+                  <a href="https://sagar-horizon.vercel.app" target="_blank" rel="noreferrer" className="flex items-center gap-4 rounded-2xl px-5 py-4 bg-gradient-to-r from-gold/15 to-electric/10 border border-gold/40 hover:border-gold transition group">
+                    <span className="w-10 h-10 rounded-xl bg-gold text-black font-display font-bold flex items-center justify-center shrink-0">✦</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] tracking-[0.25em] text-gold">PORTFOLIO</p>
+                      <p className="font-medium truncate group-hover:text-gold transition">sagar-horizon.vercel.app</p>
                     </div>
                     <span className="text-gold">↗</span>
                   </a>
-                ))}
-              </div>
-            </Reveal>
-            <Reveal delay={0.18}>
-              <p className="text-xs text-slate-400 mt-6 border-l-2 border-gold/60 pl-4 leading-relaxed">
-                <span className="text-gold font-semibold">INFRASTRUCTURE NOTE — </span>
-                Domain, hosting, database/cloud and paid third-party services are billed separately by
-                the provider. Setup and deployment are included within the agreed website scope.
-              </p>
-              <p className="font-display font-bold mt-6">SAGAR PATHAK</p>
-              <p className="text-xs text-slate-400">Web Development • Websites • Custom Apps — THANK YOU</p>
-            </Reveal>
+                  {SOCIALS.map((s) => (
+                    <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="flex items-center gap-4 glass rounded-2xl px-5 py-4 hover:border-gold/50 transition group">
+                      <span className="w-10 h-10 rounded-xl bg-white/8 border border-white/12 font-display font-bold text-gold flex items-center justify-center shrink-0">
+                        {s.label.charAt(0)}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[11px] tracking-[0.25em] text-slate-400">{s.label}</p>
+                        <p className="font-medium truncate group-hover:text-gold transition">{s.value}</p>
+                      </div>
+                      <span className="text-gold">↗</span>
+                    </a>
+                  ))}
+                </div>
+              </Reveal>
+              <Reveal delay={0.18}>
+                <p className="text-xs text-slate-400 mt-6 border-l-2 border-gold/60 pl-4 leading-relaxed">
+                  <span className="text-gold font-semibold">INFRASTRUCTURE NOTE — </span>
+                  Domain, hosting, database/cloud and paid third-party services are billed separately by
+                  the provider. Setup and deployment are included within the agreed website scope.
+                </p>
+                <p className="font-display font-bold mt-6">SAGAR PATHAK</p>
+                <p className="text-xs text-slate-400">Web Development • Websites • Custom Apps — THANK YOU</p>
+              </Reveal>
+            </div>
           </div>
         </div>
       </div>
       <footer className="text-center text-xs text-slate-500 mt-10">
-        © {new Date().getFullYear()} Sagar Pathak · Built with React + TS + Three.js + Framer Motion + Tailwind
+        © {new Date().getFullYear()} Sagar Pathak · <a className="hover:text-gold transition" href="https://sagar-horizon.vercel.app" target="_blank" rel="noreferrer">Portfolio</a> · Built with React + TS + Three.js + Framer Motion + Tailwind
       </footer>
     </section>
   )
