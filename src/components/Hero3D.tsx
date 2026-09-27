@@ -77,15 +77,20 @@ function ParticleRing({ count = 260 }: { count?: number }) {
 
 export default function Hero3D() {
   return (
-    <div className="absolute inset-0" data-testid="hero-3d">
-      <Canvas camera={{ position: [0, 0.6, 7], fov: 45 }} dpr={[1, 1.75]} gl={{ antialias: true, alpha: true }}>
+    <div className="absolute inset-0" data-testid="hero-3d" aria-hidden="true">
+      <Canvas
+        camera={{ position: [0, 0.6, 7], fov: 45 }}
+        dpr={[1, 1.5]}
+        frameloop="always"
+        gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+      >
         <ambientLight intensity={0.7} />
         <pointLight position={[5, 5, 5]} intensity={1.4} color="#38e1ff" />
         <pointLight position={[-5, -2, 3]} intensity={1.2} color="#f5b942" />
         <pointLight position={[0, 3, -4]} intensity={0.8} color="#7c5cff" />
-        <Stars radius={60} depth={30} count={2500} factor={3} saturation={0} fade speed={0.6} />
+        <Stars radius={60} depth={30} count={1500} factor={3} saturation={0} fade speed={0.5} />
         <CrystalCore />
-        <ParticleRing />
+        <ParticleRing count={180} />
         <ContactShadows position={[0, -2.4, 0]} opacity={0.55} scale={12} blur={2.4} far={4} color="#000" />
       </Canvas>
     </div>

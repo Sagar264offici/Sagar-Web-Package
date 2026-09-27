@@ -1,6 +1,8 @@
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import { motion } from 'framer-motion'
-import Hero3D from './Hero3D'
+
+// Code-split the heavy Three.js canvas so first paint stays fast (SEO / LCP).
+const Hero3D = lazy(() => import('./Hero3D'))
 
 export default function Hero() {
   return (
@@ -108,8 +110,12 @@ export default function Hero() {
           <div className="relative glass rounded-[2rem] p-3 overflow-hidden">
             <img
               src="/portrait.png"
-              alt="Sagar Pathak holding a glowing sphere of web technologies"
+              alt="Sagar Pathak holding a glowing sphere of web technologies — React, JavaScript, Python and more"
               className="rounded-[1.6rem] w-full object-cover aspect-square"
+              width={640}
+              height={640}
+              fetchPriority="high"
+              decoding="async"
             />
             <div className="absolute bottom-6 left-6 right-6 glass rounded-2xl px-5 py-4 flex items-center justify-between">
               <div>
