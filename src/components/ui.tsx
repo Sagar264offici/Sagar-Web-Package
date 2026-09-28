@@ -1,7 +1,10 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import type { ReactNode } from 'react'
 
-export function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
+export function Reveal({ children, delay = 0, className = '', reducedMotion = false }: { children: ReactNode; delay?: number; className?: string; reducedMotion?: boolean }) {
+  if (reducedMotion) {
+    return <div className={className}>{children}</div>
+  }
   return (
     <motion.div
       className={className}
@@ -26,14 +29,14 @@ export function SectionHeading({
 }) {
   return (
     <div className="max-w-3xl">
-      <Reveal>
+      <Reveal reducedMotion={true}>
         <p className="text-xs tracking-[0.3em] text-gold font-semibold">{kicker}</p>
       </Reveal>
-      <Reveal delay={0.08}>
+      <Reveal delay={0.08} reducedMotion={true}>
         <h2 className="font-display text-3xl md:text-5xl font-700 font-bold leading-tight mt-3">{title}</h2>
       </Reveal>
       {desc && (
-        <Reveal delay={0.16}>
+        <Reveal delay={0.16} reducedMotion={true}>
           <p className="text-slate-300/90 mt-4 leading-relaxed">{desc}</p>
         </Reveal>
       )}
@@ -41,7 +44,10 @@ export function SectionHeading({
   )
 }
 
-export function Parallax({ children, className = '' }: { children: ReactNode; className?: string }) {
+export function Parallax({ children, className = '', reducedMotion = false }: { children: ReactNode; className?: string; reducedMotion?: boolean }) {
+  if (reducedMotion) {
+    return <div className={className}>{children}</div>
+  }
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], [0, -120])
   return (
