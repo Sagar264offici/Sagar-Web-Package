@@ -1,3 +1,19 @@
 User-agent: *
 Allow: /
+
+# Block admin/utility paths (if any in future)
+Disallow: /admin/
+Disallow: /api/
+
+# AI/LLM crawlers - optional: allow or block
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Sitemap
 Sitemap: https://sagar-web-package.vercel.app/sitemap.xml
